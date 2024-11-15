@@ -23,4 +23,4 @@ repo_name: "TBD"
 repo: ucsb-cs156-f24/proj-rec-f24-06
 owner: ucsb-cs156-f24
 repo_name: proj-rec-f24-06
-pull_requests: [{"author":{"id":"MDQ6VXNlcjQzMzk0Njg0","is_bot":false,"login":"chriswlai","name":"Christopher Lai"},"headRefName":"cl-user","number":31,"title":"Add multi-role feature to user","url":"https://github.com/ucsb-cs156-f24/proj-rec-f24-06/pull/31"}]
+pull_requests: [{"author":{"id":"U_kgDOBs-ReA","is_bot":false,"login":"michaelljiang","name":"Michael Jiang"},"headRefName":"mj-add-old-rec-files","number":32,"title":"adding old recommendation files","url":"https://github.com/ucsb-cs156-f24/proj-rec-f24-06/pull/32"},{"author":{"id":"MDQ6VXNlcjQzMzk0Njg0","is_bot":false,"login":"chriswlai","name":"Christopher Lai"},"headRefName":"cl-user","number":31,"title":"Add multi-role feature to user","url":"https://github.com/ucsb-cs156-f24/proj-rec-f24-06/pull/31"}]
