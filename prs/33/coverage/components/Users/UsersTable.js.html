@@ -186,8 +186,14 @@
 <a name='L121'></a><a href='#L121'>121</a>
 <a name='L122'></a><a href='#L122'>122</a>
 <a name='L123'></a><a href='#L123'>123</a>
-<a name='L124'></a><a href='#L124'>124</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L124'></a><a href='#L124'>124</a>
+<a name='L125'></a><a href='#L125'>125</a>
+<a name='L126'></a><a href='#L126'>126</a>
+<a name='L127'></a><a href='#L127'>127</a>
+<a name='L128'></a><a href='#L128'>128</a>
+<a name='L129'></a><a href='#L129'>129</a>
+<a name='L130'></a><a href='#L130'>130</a>
+<a name='L131'></a><a href='#L131'>131</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -303,36 +309,43 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import OurTable, {ButtonColumn} from "main/components/OurTable";
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import OurTable, { ButtonColumn } from "main/components/OurTable";
 import { useBackendMutation } from "main/utils/useBackend";
 &nbsp;
 export default function UsersTable({ users }) {
-  
   // Toggle Admin User
   function <span class="fstat-no" title="function not covered" >cellToAxiosParamsToggleAdmin(</span>cell) {
 <span class="cstat-no" title="statement not covered" >    return {</span>
       url: "/api/admin/users/toggleAdmin",
       method: "POST",
       params: {
-          id: cell.row.values.id
-      }
+        id: cell.row.values.id,
+      },
     };
   }
   // Stryker disable all : hard to test for query caching
   const toggleAdminMutation = useBackendMutation(
     cellToAxiosParamsToggleAdmin,
     {},
-    ["/api/admin/users"]
+    ["/api/admin/users"],
   );
-  // Stryker enable all 
+  // Stryker enable all
 &nbsp;
-  // Stryker disable next-line all 
+  // Stryker disable next-line all
   const toggleAdminCallBack = <span class="fstat-no" title="function not covered" >(c</span>ell) =&gt; {
 <span class="cstat-no" title="statement not covered" >    toggleAdminMutation.mutate(cell);</span>
   };
@@ -343,8 +356,8 @@ export default function UsersTable({ users }) {
       url: "/api/admin/users/toggleProfessor",
       method: "POST",
       params: {
-          id: cell.row.values.id
-      }
+        id: cell.row.values.id,
+      },
     };
   }
 &nbsp;
@@ -352,11 +365,11 @@ export default function UsersTable({ users }) {
   const toggleProfessorMutation = useBackendMutation(
     cellToAxiosParamsToggleProfessor,
     {},
-    ["/api/admin/users"]
+    ["/api/admin/users"],
   );
-  // Stryker enable all 
+  // Stryker enable all
 &nbsp;
-  // Stryker disable next-line all 
+  // Stryker disable next-line all
   const toggleProfessorCallBack = <span class="fstat-no" title="function not covered" >(c</span>ell) =&gt; {
 <span class="cstat-no" title="statement not covered" >    toggleProfessorMutation.mutate(cell);</span>
   };
@@ -367,8 +380,8 @@ export default function UsersTable({ users }) {
       url: "/api/admin/users/toggleStudent",
       method: "POST",
       params: {
-          id: cell.row.values.id
-      }
+        id: cell.row.values.id,
+      },
     };
   }
 &nbsp;
@@ -376,11 +389,11 @@ export default function UsersTable({ users }) {
   const toggleStudentMutation = useBackendMutation(
     cellToAxiosParamsToggleStudent,
     {},
-    ["/api/admin/users"]
+    ["/api/admin/users"],
   );
-  // Stryker enable all 
+  // Stryker enable all
 &nbsp;
-  // Stryker disable next-line all 
+  // Stryker disable next-line all
   const toggleStudentCallBack = <span class="fstat-no" title="function not covered" >(c</span>ell) =&gt; {
 <span class="cstat-no" title="statement not covered" >    toggleStudentMutation.mutate(cell);</span>
   };
@@ -410,27 +423,35 @@ export default function UsersTable({ users }) {
     {
       Header: "Professor",
       id: "professor",
-      accessor: (row, _rowIndex) =&gt; String(row.professor), 
+      accessor: (row, _rowIndex) =&gt; String(row.professor),
     },
     {
       Header: "Student",
       id: "student",
       accessor: (row, _rowIndex) =&gt; String(row.student),
-    }
+    },
   ];
 &nbsp;
   const buttonColumns = [
     ...columns,
     ButtonColumn("Toggle Admin", "primary", toggleAdminCallBack, "UsersTable"),
-    ButtonColumn("Toggle Professor", "primary", toggleProfessorCallBack, "UsersTable"),
-    ButtonColumn("Toggle Student", "primary", toggleStudentCallBack, "UsersTable"),
-  ]
+    ButtonColumn(
+      "Toggle Professor",
+      "primary",
+      toggleProfessorCallBack,
+      "UsersTable",
+    ),
+    ButtonColumn(
+      "Toggle Student",
+      "primary",
+      toggleStudentCallBack,
+      "UsersTable",
+    ),
+  ];
 &nbsp;
-  return &lt;OurTable 
-    data={users}
-    columns={buttonColumns} 
-    testid={"UsersTable"} 
-  /&gt;;
+  return (
+    &lt;OurTable data={users} columns={buttonColumns} testid={"UsersTable"} /&gt;
+  );
 }
 &nbsp;</pre></td></tr></table></pre>
 
@@ -439,7 +460,7 @@ export default function UsersTable({ users }) {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-11-15T13:11:25.256Z
+                at 2024-11-15T22:16:36.091Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
