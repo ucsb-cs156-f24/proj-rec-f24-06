@@ -27,7 +27,7 @@
                       "autoIncrement": true,
                       "constraints": {
                         "primaryKey": true,
-                        "primaryKeyName": "CONSTRAINT_7"
+                        "primaryKeyName": "RECOMMENDATIONREQUEST_PK"
                       },
                       "name": "ID",
                       "type": "BIGINT"
@@ -66,12 +66,6 @@
                   {
                     "column": {
                       "name": "RECOMMENDATION_TYPES",
-                      "type": "VARCHAR(255)"
-                    }
-                  },
-                  {
-                    "column": {
-                      "name": "OTHER",
                       "type": "VARCHAR(255)"
                     }
                   },
