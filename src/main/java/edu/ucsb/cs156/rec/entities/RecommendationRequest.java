@@ -28,7 +28,7 @@ public class RecommendationRequest {
 
   private String professorName;
   private String professorEmail;
-  private String requesterEmail;
+  private String requesterName;
   private String recommendationTypes; //dropdown, may want to make this id from recommendationtypes (come back to)
   private String details;
   private String status;

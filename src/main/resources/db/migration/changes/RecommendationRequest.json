@@ -3,7 +3,7 @@
       {
         "changeSet": {
           "id": "RecommendationRequest-1",
-          "author": "MattP",
+          "author": "SkandaV",
           "preConditions": [
             {
               "onFail": "MARK_RAN"
@@ -59,7 +59,7 @@
                   },
                   {
                     "column": {
-                      "name": "REQUESTER_EMAIL",
+                      "name": "REQUESTER_NAME",
                       "type": "VARCHAR(255)"
                     }
                   },
