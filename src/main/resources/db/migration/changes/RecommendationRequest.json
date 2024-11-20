@@ -36,13 +36,13 @@
                   {
                     "column": {
                       "name": "SUBMISSION_DATE",
-                      "type": "TIMESTAMP"
+                      "type": "DATE"
                     }
                   },
                   {
                     "column": {
                       "name": "COMPLETION_DATE",
-                      "type": "TIMESTAMP"
+                      "type": "DATE"
                     }
                   },
                   {
@@ -72,6 +72,12 @@
                   {
                     "column": {
                       "name": "DETAILS",
+                      "type": "VARCHAR(255)"
+                    }
+                  },
+                  {
+                    "column": {
+                      "name": "STATUS",
                       "type": "VARCHAR(255)"
                     }
                   }

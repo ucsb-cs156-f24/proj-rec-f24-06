@@ -9,7 +9,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 /**
  * This is a JPA entity that represents a RecommendationRequest, i.e. an entry
@@ -31,9 +31,10 @@ public class RecommendationRequest {
   private String requesterEmail;
   private String recommendationTypes; //dropdown, may want to make this id from recommendationtypes (come back to)
   private String details;
+  private String status;
 
 
-  private LocalDateTime submissionDate;
-  private LocalDateTime completionDate;
+  private LocalDate submissionDate;
+  private LocalDate completionDate;
 
 }
