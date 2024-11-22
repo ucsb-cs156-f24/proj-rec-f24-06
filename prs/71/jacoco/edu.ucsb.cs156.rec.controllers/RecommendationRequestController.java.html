@@ -107,7 +107,7 @@ import java.util.Optional;
 
 <span class="fc" id="L108">            log.info(&quot;submissionDate{}&quot;, submissionDate);</span>
 
-<span class="fc" id="L110">            userRepository.findByName(professorName)</span>
+<span class="fc" id="L110">            userRepository.findByFullName(professorName)</span>
 <span class="fc" id="L111">                .orElseThrow(() -&gt; new EntityNotFoundException(User.class, professorName));</span>
 
 
