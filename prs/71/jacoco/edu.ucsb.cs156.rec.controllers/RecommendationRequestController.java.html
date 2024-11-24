@@ -95,7 +95,7 @@ import java.util.Optional;
     */
     
     @Operation(summary= &quot;Create a new recommendation request&quot;)
-    @PreAuthorize(&quot;hasRole('ROLE_ADMIN')&quot;)
+    @PreAuthorize(&quot;hasAnyRole('ROLE_ADMIN', 'ROLE_STUDENT')&quot;)
     @PostMapping(&quot;/post&quot;)
     public RecommendationRequest postRecommendationRequest(
         @Parameter(name=&quot;professorName&quot;) @RequestParam String professorName,
@@ -157,7 +157,7 @@ import java.util.Optional;
      * @return the updated recommendation request object
      */
     @Operation(summary= &quot;Update a single recommendation request&quot;)
-    @PreAuthorize(&quot;hasRole('ROLE_ADMIN')&quot;)
+    @PreAuthorize(&quot;hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')&quot;)
     @PutMapping(&quot;&quot;)
     public RecommendationRequest updateRecommendationRequest(
             @Parameter(name=&quot;id&quot;) @RequestParam Long id,
@@ -187,7 +187,7 @@ import java.util.Optional;
      * @return an iterable of RecommendationRequest with name of the professor
      */
     @Operation(summary= &quot;Get all recommendation requests by Professor Name&quot;)
-    @PreAuthorize(&quot;hasRole('ROLE_ADMIN')&quot;) // Change to ROLE_PROFESSOR LATER
+    @PreAuthorize(&quot;hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')&quot;) // Change to ROLE_PROFESSOR LATER
     @GetMapping(&quot;/professor/{professorName}&quot;)
     public Iterable&lt;RecommendationRequest&gt; getRecommendationRequestsByProfessorName(
             @Parameter(name = &quot;professorName&quot;) @PathVariable String professorName) {
@@ -202,7 +202,7 @@ import java.util.Optional;
      * @return 
      */
     @Operation(summary= &quot;Get all recommendation requests by Requester Name&quot;)
-    @PreAuthorize(&quot;hasRole('ROLE_ADMIN')&quot;) // Change to ROLE_PROFESSOR LATER
+    @PreAuthorize(&quot;hasAnyRole('ROLE_ADMIN', 'ROLE_STUDENT')&quot;) // Change to ROLE_PROFESSOR LATER
     @GetMapping(&quot;/requester/{requesterName}&quot;)
     public Iterable&lt;RecommendationRequest&gt; getRecommendationRequestsByRequesterName(
             @Parameter(name = &quot;requesterName&quot;) @PathVariable String requesterName) {
