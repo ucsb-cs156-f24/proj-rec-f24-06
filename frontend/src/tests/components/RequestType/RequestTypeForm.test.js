@@ -16,7 +16,7 @@ jest.mock("react-router-dom", () => ({
 describe("RequestTypeForm tests", () => {
   const queryClient = new QueryClient();
 
-  const expectedHeaders = ["Description"];
+  const expectedHeaders = ["Request Type"];
   const testId = "RequestTypeForm";
 
   test("renders correctly with no initialContents", async () => {
@@ -87,14 +87,14 @@ describe("RequestTypeForm tests", () => {
     const submitButton = screen.getByText(/Create/);
     fireEvent.click(submitButton);
 
-    await screen.findByText(/Description is required/);
+    await screen.findByText(/Request Type is required/);
 
-    const descriptionInput = screen.getByTestId(`${testId}-description`);
+    const descriptionInput = screen.getByTestId(`${testId}-requestType`);
     fireEvent.change(descriptionInput, { target: { value: "" } });
     fireEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(screen.getByText(/Description is required/)).toBeInTheDocument();
+      expect(screen.getByText(/Request Type is required/)).toBeInTheDocument();
     });
 
     fireEvent.change(descriptionInput, { target: { value: "a".repeat(101) } });

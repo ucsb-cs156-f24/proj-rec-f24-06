@@ -35,7 +35,7 @@ function RequestTypeForm({
         </Form.Group>
       )}
 
-      <Form.Group className="mb-3">
+      {/* <Form.Group className="mb-3">
         <Form.Label htmlFor="description">Description</Form.Label>
         <Form.Control
           data-testid={testIdPrefix + "-description"}
@@ -52,6 +52,26 @@ function RequestTypeForm({
         />
         <Form.Control.Feedback type="invalid">
           {errors.description?.message}
+        </Form.Control.Feedback>
+      </Form.Group> */}
+
+      <Form.Group className="mb-3">
+        <Form.Label htmlFor="requestType">Request Type</Form.Label>
+        <Form.Control
+          data-testid={testIdPrefix + "-requestType"}
+          id="requestType"
+          type="text"
+          isInvalid={Boolean(errors.requestType)}
+          {...register("requestType", {
+            required: "Request Type is required.",
+            maxLength: {
+              value: 100,
+              message: "Max length 100 characters",
+            },
+          })}
+        />
+        <Form.Control.Feedback type="invalid">
+          {errors.requestType?.message}
         </Form.Control.Feedback>
       </Form.Group>
 
