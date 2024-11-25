@@ -69,6 +69,7 @@ import java.util.List;
      * Get a single recommendation request by id
      * 
      * @param id the id of the recommendation request
+     * @throws EntityNotFoundException if the recommendation request is not found
      * @return a recommendation request
      */
     @Operation(summary= &quot;Get a single recommendation request&quot;)
@@ -76,10 +77,10 @@ import java.util.List;
     @GetMapping(&quot;&quot;)
     public RecommendationRequest getById(
             @Parameter(name=&quot;id&quot;) @RequestParam Long id) {
-<span class="fc" id="L79">        RecommendationRequest recommendationRequest = recommendationRequestRepository.findById(id)</span>
-<span class="fc" id="L80">                .orElseThrow(() -&gt; new EntityNotFoundException(RecommendationRequest.class, id));</span>
+<span class="fc" id="L80">        RecommendationRequest recommendationRequest = recommendationRequestRepository.findById(id)</span>
+<span class="fc" id="L81">                .orElseThrow(() -&gt; new EntityNotFoundException(RecommendationRequest.class, id));</span>
 
-<span class="fc" id="L82">        return recommendationRequest;</span>
+<span class="fc" id="L83">        return recommendationRequest;</span>
     }
 
     /**
@@ -91,6 +92,7 @@ import java.util.List;
      * @param details the other details of the request
      * @param submissionDate the date the request was submitted
      * @param completionDate the date the request was completed
+     * @throws EntityNotFoundException if the professor is not found or is hte user does not have the professor role
      * @return the created RecommendationRequest
     */
     
@@ -106,34 +108,35 @@ import java.util.List;
         @Parameter(name=&quot;completionDate&quot;) @RequestParam(&quot;completionDate&quot;) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate completionDate)
         throws JsonProcessingException {
 
-<span class="fc" id="L109">            log.info(&quot;submissionDate{}&quot;, submissionDate);</span>
+<span class="fc" id="L111">            log.info(&quot;submissionDate{}&quot;, submissionDate);</span>
 
-<span class="fc" id="L111">            User prof = userRepository.findByEmail(professorEmail)</span>
-<span class="fc" id="L112">                .orElseThrow(() -&gt; new EntityNotFoundException(User.class, professorEmail));</span>
+<span class="fc" id="L113">            User prof = userRepository.findByEmail(professorEmail)</span>
+<span class="fc" id="L114">                .orElseThrow(() -&gt; new EntityNotFoundException(User.class, professorEmail));</span>
             
-<span class="fc bfc" id="L114" title="All 2 branches covered.">            if (!prof.getProfessor()) {</span>
-<span class="fc" id="L115">                throw new EntityNotFoundException(User.class, professorEmail);</span>
+<span class="fc bfc" id="L116" title="All 2 branches covered.">            if (!prof.getProfessor()) {</span>
+<span class="fc" id="L117">                throw new EntityNotFoundException(User.class, professorEmail);</span>
             }
 
-<span class="fc" id="L118">            RecommendationRequest recommendationRequest = new RecommendationRequest();</span>
-<span class="fc" id="L119">            recommendationRequest.setProfessor(prof);</span>
-<span class="fc" id="L120">            recommendationRequest.setProfessorEmail(professorEmail);</span>
-<span class="fc" id="L121">            recommendationRequest.setRequesterName(requesterName);</span>
-<span class="fc" id="L122">            recommendationRequest.setRecommendationTypes(recommendationTypes);</span>
-<span class="fc" id="L123">            recommendationRequest.setDetails(details);</span>
-<span class="fc" id="L124">            recommendationRequest.setSubmissionDate(submissionDate);</span>
-<span class="fc" id="L125">            recommendationRequest.setCompletionDate(completionDate);</span>
-<span class="fc" id="L126">            recommendationRequest.setStatus(&quot;pending&quot;);</span>
+<span class="fc" id="L120">            RecommendationRequest recommendationRequest = new RecommendationRequest();</span>
+<span class="fc" id="L121">            recommendationRequest.setProfessor(prof);</span>
+<span class="fc" id="L122">            recommendationRequest.setProfessorEmail(professorEmail);</span>
+<span class="fc" id="L123">            recommendationRequest.setRequesterName(requesterName);</span>
+<span class="fc" id="L124">            recommendationRequest.setRecommendationTypes(recommendationTypes);</span>
+<span class="fc" id="L125">            recommendationRequest.setDetails(details);</span>
+<span class="fc" id="L126">            recommendationRequest.setSubmissionDate(submissionDate);</span>
+<span class="fc" id="L127">            recommendationRequest.setCompletionDate(completionDate);</span>
+<span class="fc" id="L128">            recommendationRequest.setStatus(&quot;pending&quot;);</span>
 
-<span class="fc" id="L128">            RecommendationRequest savedRecommendationRequest = recommendationRequestRepository.save(recommendationRequest);</span>
+<span class="fc" id="L130">            RecommendationRequest savedRecommendationRequest = recommendationRequestRepository.save(recommendationRequest);</span>
 
-<span class="fc" id="L130">            return savedRecommendationRequest;</span>
+<span class="fc" id="L132">            return savedRecommendationRequest;</span>
     }
 
     /**
      * Delete a recommendation request
      * 
      * @param id the id of the recommendation request to delete
+     * @throws EntityNotFoundException if the recommendation request is not found
      * @return a message indicating the recommedation request was deleted
      */
     @Operation(summary= &quot;Delete a recommendation request&quot;)
@@ -141,11 +144,11 @@ import java.util.List;
     @DeleteMapping(&quot;&quot;)
     public Object deleteRecommendationRequest(
             @Parameter(name=&quot;id&quot;) @RequestParam Long id) {
-<span class="fc" id="L144">        RecommendationRequest recommendationRequest = recommendationRequestRepository.findById(id)</span>
-<span class="fc" id="L145">                .orElseThrow(() -&gt; new EntityNotFoundException(RecommendationRequest.class, id));</span>
+<span class="fc" id="L147">        RecommendationRequest recommendationRequest = recommendationRequestRepository.findById(id)</span>
+<span class="fc" id="L148">                .orElseThrow(() -&gt; new EntityNotFoundException(RecommendationRequest.class, id));</span>
 
-<span class="fc" id="L147">        recommendationRequestRepository.delete(recommendationRequest);</span>
-<span class="fc" id="L148">        return genericMessage(&quot;RecommendationRequest with id %s deleted&quot;.formatted(id));</span>
+<span class="fc" id="L150">        recommendationRequestRepository.delete(recommendationRequest);</span>
+<span class="fc" id="L151">        return genericMessage(&quot;RecommendationRequest with id %s deleted&quot;.formatted(id));</span>
     }
 
     /**
@@ -153,6 +156,7 @@ import java.util.List;
      * 
      * @param id       id of the recommendation request to update
      * @param incoming the new recommendation request
+     * @throws EntityNotFoundException if the recommendation request is not found
      * @return the updated recommendation request object
      */
     @Operation(summary= &quot;Update a single recommendation request&quot;)
@@ -162,27 +166,28 @@ import java.util.List;
             @Parameter(name=&quot;id&quot;) @RequestParam Long id,
             @RequestBody @Valid RecommendationRequest incoming) {
 
-<span class="fc" id="L165">        RecommendationRequest recommendationRequest = recommendationRequestRepository.findById(id)</span>
-<span class="fc" id="L166">                .orElseThrow(() -&gt; new EntityNotFoundException(RecommendationRequest.class, id));</span>
+<span class="fc" id="L169">        RecommendationRequest recommendationRequest = recommendationRequestRepository.findById(id)</span>
+<span class="fc" id="L170">                .orElseThrow(() -&gt; new EntityNotFoundException(RecommendationRequest.class, id));</span>
 
-<span class="fc" id="L168">        recommendationRequest.setProfessorEmail(incoming.getProfessorEmail());</span>
-<span class="fc" id="L169">        recommendationRequest.setRequesterName(incoming.getRequesterName());</span>
-<span class="fc" id="L170">        recommendationRequest.setRecommendationTypes(incoming.getRecommendationTypes());</span>
-<span class="fc" id="L171">        recommendationRequest.setDetails(incoming.getDetails());</span>
-<span class="fc" id="L172">        recommendationRequest.setSubmissionDate(incoming.getSubmissionDate());</span>
-<span class="fc" id="L173">        recommendationRequest.setCompletionDate(incoming.getCompletionDate());</span>
-<span class="fc" id="L174">        recommendationRequest.setStatus(incoming.getStatus());</span>
+<span class="fc" id="L172">        recommendationRequest.setProfessorEmail(incoming.getProfessorEmail());</span>
+<span class="fc" id="L173">        recommendationRequest.setRequesterName(incoming.getRequesterName());</span>
+<span class="fc" id="L174">        recommendationRequest.setRecommendationTypes(incoming.getRecommendationTypes());</span>
+<span class="fc" id="L175">        recommendationRequest.setDetails(incoming.getDetails());</span>
+<span class="fc" id="L176">        recommendationRequest.setSubmissionDate(incoming.getSubmissionDate());</span>
+<span class="fc" id="L177">        recommendationRequest.setCompletionDate(incoming.getCompletionDate());</span>
+<span class="fc" id="L178">        recommendationRequest.setStatus(incoming.getStatus());</span>
 
-<span class="fc" id="L176">        recommendationRequestRepository.save(recommendationRequest);</span>
+<span class="fc" id="L180">        recommendationRequestRepository.save(recommendationRequest);</span>
 
-<span class="fc" id="L178">        return recommendationRequest;</span>
+<span class="fc" id="L182">        return recommendationRequest;</span>
     }
 
     /**
      * Get all recommendation requests by Professor Name
      * 
-     * @param professorName the name of the professor
-     * @return an iterable of RecommendationRequest with name of the professor
+     * @param userId the user Id of the professor
+     * @throws EntityNotFoundException if the professor is not found
+     * @return a list of all rec reqs directed towards the professor with the given userId
      */
     @Operation(summary= &quot;Get all recommendation requests by Professor Name&quot;)
     @PreAuthorize(&quot;hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')&quot;) 
@@ -190,11 +195,11 @@ import java.util.List;
     public List&lt;RecommendationRequest&gt; getAllRecommendationRequestsByProfessor(
         @PathVariable(value=&quot;userId&quot;) long userId) {
 
-<span class="fc bfc" id="L193" title="All 2 branches covered.">        if( !userRepository.existsById(userId)) {</span>
-<span class="fc" id="L194">            throw new EntityNotFoundException(User.class, userId);</span>
+<span class="fc bfc" id="L198" title="All 2 branches covered.">        if( !userRepository.existsById(userId)) {</span>
+<span class="fc" id="L199">            throw new EntityNotFoundException(User.class, userId);</span>
         }
-<span class="fc" id="L196">        List&lt;RecommendationRequest&gt; recommendationRequests = recommendationRequestRepository.findAllByProfessorId(userId);</span>
-<span class="fc" id="L197">        return recommendationRequests;</span>
+<span class="fc" id="L201">        List&lt;RecommendationRequest&gt; recommendationRequests = recommendationRequestRepository.findAllByProfessorId(userId);</span>
+<span class="fc" id="L202">        return recommendationRequests;</span>
 
     }
 }
