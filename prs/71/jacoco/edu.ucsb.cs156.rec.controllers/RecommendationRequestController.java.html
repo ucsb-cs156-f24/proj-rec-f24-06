@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.http.HttpStatus;
 
 import jakarta.validation.Valid;
@@ -44,8 +45,8 @@ import java.util.List;
 @Tag(name = &quot;RecommendationRequest&quot;)
 @RequestMapping(&quot;/api/recommendationrequest&quot;)
 @RestController
-<span class="fc" id="L47">@Slf4j</span>
-<span class="fc" id="L48">public class RecommendationRequestController extends ApiController{</span>
+<span class="fc" id="L48">@Slf4j</span>
+<span class="fc" id="L49">public class RecommendationRequestController extends ApiController{</span>
     
     @Autowired
     RecommendationRequestRepository recommendationRequestRepository;
@@ -65,8 +66,8 @@ import java.util.List;
     @PreAuthorize(&quot;hasRole('ROLE_ADMIN')&quot;)
     @GetMapping(&quot;/all&quot;)
     public Iterable&lt;RecommendationRequest&gt; allRecommendationRequests() {
-<span class="fc" id="L68">        Iterable&lt;RecommendationRequest&gt; requests = recommendationRequestRepository.findAll();</span>
-<span class="fc" id="L69">        return requests;</span>
+<span class="fc" id="L69">        Iterable&lt;RecommendationRequest&gt; requests = recommendationRequestRepository.findAll();</span>
+<span class="fc" id="L70">        return requests;</span>
     }
 
     /**
@@ -81,10 +82,10 @@ import java.util.List;
     @GetMapping(&quot;&quot;)
     public RecommendationRequest getById(
             @Parameter(name=&quot;id&quot;) @RequestParam Long id) {
-<span class="fc" id="L84">        RecommendationRequest recommendationRequest = recommendationRequestRepository.findById(id)</span>
-<span class="fc" id="L85">                .orElseThrow(() -&gt; new EntityNotFoundException(RecommendationRequest.class, id));</span>
+<span class="fc" id="L85">        RecommendationRequest recommendationRequest = recommendationRequestRepository.findById(id)</span>
+<span class="fc" id="L86">                .orElseThrow(() -&gt; new EntityNotFoundException(RecommendationRequest.class, id));</span>
 
-<span class="fc" id="L87">        return recommendationRequest;</span>
+<span class="fc" id="L88">        return recommendationRequest;</span>
     }
 
     /**
@@ -97,7 +98,7 @@ import java.util.List;
     */
     
     @Operation(summary= &quot;Create a new recommendation request&quot;)
-    @PreAuthorize(&quot;hasAnyRole('ROLE_ADMIN', 'ROLE_STUDENT')&quot;)
+    @PreAuthorize(&quot;hasRole('ROLE_STUDENT')&quot;)
     @PostMapping(&quot;/post&quot;)
     public RecommendationRequest postRecommendationRequest(
         @Parameter(name=&quot;professorEmail&quot;) @RequestParam String professorEmail,
@@ -105,21 +106,20 @@ import java.util.List;
         @Parameter(name=&quot;details&quot;) @RequestParam String details)
         throws JsonProcessingException {
 
-<span class="fc" id="L108">            User prof = userRepository.findByEmail(professorEmail)</span>
-<span class="fc" id="L109">                .orElseThrow(() -&gt; new EntityNotFoundException(User.class, professorEmail));</span>
+<span class="fc" id="L109">            User prof = userRepository.findByEmail(professorEmail)</span>
+<span class="fc" id="L110">                .orElseThrow(() -&gt; new EntityNotFoundException(User.class, professorEmail));</span>
             
-<span class="fc bfc" id="L111" title="All 2 branches covered.">            if (!prof.getProfessor()) {</span>
-<span class="fc" id="L112">                throw new EntityNotFoundException(User.class, professorEmail);</span>
+<span class="fc bfc" id="L112" title="All 2 branches covered.">            if (!prof.getProfessor()) {</span>
+<span class="fc" id="L113">                throw new EntityNotFoundException(User.class, professorEmail);</span>
             }
 
-<span class="fc" id="L115">            RequestType type = requestTypeRepository.findByRequestType(recommendationType)</span>
-<span class="fc" id="L116">                .orElseThrow(() -&gt; new EntityNotFoundException(RequestType.class, recommendationType));</span>
+<span class="fc" id="L116">            RequestType type = requestTypeRepository.findByRequestType(recommendationType)</span>
+<span class="fc" id="L117">                .orElseThrow(() -&gt; new EntityNotFoundException(RequestType.class, recommendationType));</span>
 
-<span class="fc" id="L118">            LocalDate currDate = LocalDate.now();</span>
+<span class="fc" id="L119">            LocalDate currDate = LocalDate.now();</span>
 
-<span class="fc" id="L120">            RecommendationRequest recommendationRequest = new RecommendationRequest();</span>
-<span class="fc" id="L121">            recommendationRequest.setProfessor(prof);</span>
-<span class="fc" id="L122">            recommendationRequest.setProfessorEmail(professorEmail);</span>
+<span class="fc" id="L121">            RecommendationRequest recommendationRequest = new RecommendationRequest();</span>
+<span class="fc" id="L122">            recommendationRequest.setProfessor(prof);</span>
 <span class="fc" id="L123">            recommendationRequest.setRequester(getCurrentUser().getUser());</span>
 <span class="fc" id="L124">            recommendationRequest.setRecommendationType(type);</span>
 <span class="fc" id="L125">            recommendationRequest.setDetails(details);</span>
@@ -139,15 +139,19 @@ import java.util.List;
      * @return a message indicating the recommedation request was deleted
      */
     @Operation(summary= &quot;Delete a recommendation request&quot;)
-    @PreAuthorize(&quot;hasRole('ROLE_ADMIN')&quot;)
+    @PreAuthorize(&quot;hasRole('ROLE_USER')&quot;)
     @DeleteMapping(&quot;&quot;)
     public Object deleteRecommendationRequest(
             @Parameter(name=&quot;id&quot;) @RequestParam Long id) {
 <span class="fc" id="L146">        RecommendationRequest recommendationRequest = recommendationRequestRepository.findById(id)</span>
 <span class="fc" id="L147">                .orElseThrow(() -&gt; new EntityNotFoundException(RecommendationRequest.class, id));</span>
 
-<span class="fc" id="L149">        recommendationRequestRepository.delete(recommendationRequest);</span>
-<span class="fc" id="L150">        return genericMessage(&quot;RecommendationRequest with id %s deleted&quot;.formatted(id));</span>
+<span class="fc bfc" id="L149" title="All 2 branches covered.">        if( recommendationRequest.getRequester().getId() != getCurrentUser().getUser().getId()) {</span>
+<span class="fc" id="L150">            throw new AccessDeniedException(null);</span>
+        }
+
+<span class="fc" id="L153">        recommendationRequestRepository.delete(recommendationRequest);</span>
+<span class="fc" id="L154">        return genericMessage(&quot;RecommendationRequest with id %s deleted&quot;.formatted(id));</span>
     }
 
     /**
@@ -165,20 +169,19 @@ import java.util.List;
             @Parameter(name=&quot;id&quot;) @RequestParam Long id,
             @RequestBody @Valid RecommendationRequest incoming) {
 
-<span class="fc" id="L168">        RecommendationRequest recommendationRequest = recommendationRequestRepository.findById(id)</span>
-<span class="fc" id="L169">                .orElseThrow(() -&gt; new EntityNotFoundException(RecommendationRequest.class, id));</span>
+<span class="fc" id="L172">        RecommendationRequest recommendationRequest = recommendationRequestRepository.findById(id)</span>
+<span class="fc" id="L173">                .orElseThrow(() -&gt; new EntityNotFoundException(RecommendationRequest.class, id));</span>
 
-<span class="fc" id="L171">        LocalDate currDate = LocalDate.now();</span>
+<span class="fc" id="L175">        LocalDate currDate = LocalDate.now();</span>
 
-<span class="fc" id="L173">        recommendationRequest.setProfessorEmail(incoming.getProfessorEmail());</span>
-<span class="fc" id="L174">        recommendationRequest.setRecommendationType(incoming.getRecommendationType());</span>
-<span class="fc" id="L175">        recommendationRequest.setDetails(incoming.getDetails());</span>
-<span class="fc" id="L176">        recommendationRequest.setCompletionDate(currDate);</span>
-<span class="fc" id="L177">        recommendationRequest.setStatus(incoming.getStatus());</span>
+<span class="fc" id="L177">        recommendationRequest.setRecommendationType(incoming.getRecommendationType());</span>
+<span class="fc" id="L178">        recommendationRequest.setDetails(incoming.getDetails());</span>
+<span class="fc" id="L179">        recommendationRequest.setCompletionDate(currDate);</span>
+<span class="fc" id="L180">        recommendationRequest.setStatus(incoming.getStatus());</span>
 
-<span class="fc" id="L179">        recommendationRequestRepository.save(recommendationRequest);</span>
+<span class="fc" id="L182">        recommendationRequestRepository.save(recommendationRequest);</span>
 
-<span class="fc" id="L181">        return recommendationRequest;</span>
+<span class="fc" id="L184">        return recommendationRequest;</span>
     }
 
     /**
@@ -194,11 +197,11 @@ import java.util.List;
     public List&lt;RecommendationRequest&gt; getAllRecommendationRequestsByProfessor(
         @PathVariable(value=&quot;userId&quot;) long userId) {
 
-<span class="fc bfc" id="L197" title="All 2 branches covered.">        if( !userRepository.existsById(userId)) {</span>
-<span class="fc" id="L198">            throw new EntityNotFoundException(User.class, userId);</span>
+<span class="fc bfc" id="L200" title="All 2 branches covered.">        if( !userRepository.existsById(userId)) {</span>
+<span class="fc" id="L201">            throw new EntityNotFoundException(User.class, userId);</span>
         }
-<span class="fc" id="L200">        List&lt;RecommendationRequest&gt; recommendationRequests = recommendationRequestRepository.findAllByProfessorId(userId);</span>
-<span class="fc" id="L201">        return recommendationRequests;</span>
+<span class="fc" id="L203">        List&lt;RecommendationRequest&gt; recommendationRequests = recommendationRequestRepository.findAllByProfessorId(userId);</span>
+<span class="fc" id="L204">        return recommendationRequests;</span>
     }
 
     /** 
@@ -213,11 +216,11 @@ import java.util.List;
     public List&lt;RecommendationRequest&gt; getAllRecommendationRequestsByRequester(
         @PathVariable(value=&quot;userId&quot;) long userId){
 
-<span class="fc bfc" id="L216" title="All 2 branches covered.">        if( !userRepository.existsById(userId)) {</span>
-<span class="fc" id="L217">            throw new EntityNotFoundException(User.class, userId);</span>
+<span class="fc bfc" id="L219" title="All 2 branches covered.">        if( !userRepository.existsById(userId)) {</span>
+<span class="fc" id="L220">            throw new EntityNotFoundException(User.class, userId);</span>
         }
-<span class="fc" id="L219">        List&lt;RecommendationRequest&gt; recommendationRequests = recommendationRequestRepository.findAllByRequesterId(userId);</span>
-<span class="fc" id="L220">        return recommendationRequests;</span>
+<span class="fc" id="L222">        List&lt;RecommendationRequest&gt; recommendationRequests = recommendationRequestRepository.findAllByRequesterId(userId);</span>
+<span class="fc" id="L223">        return recommendationRequests;</span>
 
     }
 }
