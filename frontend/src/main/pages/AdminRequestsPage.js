@@ -1,15 +1,34 @@
-import BasicLayout from "main/layouts/BasicLayout/BasicLayout";
-
+import React from "react";
 import { useBackend } from "main/utils/useBackend";
-const AdminRequestsPage = () => {
-  const { error: _error, status: _status } = useBackend();
-  // Stryker disable next-line all : don't test internal caching of React Query
+
+import BasicLayout from "main/layouts/BasicLayout/BasicLayout";
+import AllRecommendationRequestsTable from "main/components/Admin/AdminRequestsTable";
+import { useCurrentUser } from "main/utils/currentUser";
+
+export default function AdminRequestsPage() {
+  // Stryker disable all : placeholder for future implementation
+  const currentUser = useCurrentUser();
+
+  const {
+    data: requests,
+    error: _error,
+    status: _status,
+  } = useBackend(
+    // Stryker disable next-line all : don't test internal caching of React Query
+    ["/api/recommendationrequest/all"],
+    { method: "GET", url: "/api/recommendationrequest/all" },
+    [],
+  );
 
   return (
     <BasicLayout>
-      <h2>All Recommendation Requests</h2>
+      <div className="pt-2">
+        <h1>All Recommendation Requests</h1>
+        <AllRecommendationRequestsTable
+          requests={requests}
+          currentUser={currentUser}
+        />
+      </div>
     </BasicLayout>
   );
-};
-
-export default AdminRequestsPage;
+}
