@@ -47,7 +47,7 @@ public class UsersController extends ApiController {
     @GetMapping("")
     public ResponseEntity<String> users()
             throws JsonProcessingException {
-        Iterable<User> users = userRepository.findAll();
+        Iterable<User> users = userRepository.findAllByOrderByIdAsc();
         String body = mapper.writeValueAsString(users);
         return ResponseEntity.ok().body(body);
     }
