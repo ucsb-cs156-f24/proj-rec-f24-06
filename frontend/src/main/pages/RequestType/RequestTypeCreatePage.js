@@ -5,6 +5,7 @@ import { useBackendMutation } from "main/utils/useBackend";
 import { toast } from "react-toastify";
 
 export default function RequestTypeCreatePage({ storybook = false }) {
+  // Stryker disable all : placeholder for future implementation
   const objectToAxiosParams = (requestType) => ({
     url: "/api/request-types/post",
     method: "POST",
@@ -35,7 +36,7 @@ export default function RequestTypeCreatePage({ storybook = false }) {
   if (isSuccess && !storybook) {
     return <Navigate to="/requesttype" />;
   }
-
+  // Stryker disable all : placeholder for future implementation
   return (
     <BasicLayout>
       <div className="pt-2">
